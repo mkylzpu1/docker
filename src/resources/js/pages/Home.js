@@ -1,8 +1,9 @@
 
-import React from 'react';
+import React,{useState,useEffect} from 'react';
 import { Button, Card } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import MainTable from '../components/MainTable';
+import axios from 'axios';
 
 //スタイルの定義
 const useStyles = makeStyles((theme) => createStyles({
@@ -31,6 +32,24 @@ let rows = [
 function Home() {
     //定義したスタイルを利用するための設定
     const classes = useStyles();
+
+    const [posts,setPosts] = useState([]);
+
+    useEffect(() => {
+      getPostsData();
+    },[])
+
+    const getPostsData = () => {
+      axios
+        .get('/api/posts')
+        .then(res => {
+            setPosts(res.data);
+            console.log(res.data);
+        })
+        .catch(() => {
+          console.log('通信に失敗しました')
+        });
+    }
 
     return (
         <div className="container">
